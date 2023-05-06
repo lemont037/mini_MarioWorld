@@ -183,6 +183,7 @@ def scan_line(buf, pol, tex):
 
             x1 = p1[0]
             x2 = p2[0]
+            
 
             if (x2 < x1):
                 p1, p2 = p2, p1
@@ -192,7 +193,7 @@ def scan_line(buf, pol, tex):
 
                 tx = p1[2] + pc*(p2[2]-p1[2])
                 ty = p1[3] + pc*(p2[3]-p1[3])
-
+        
                 intst = get_pixel(tex, tx, ty)
 
                 img = set_pixel(img, xk, y, intst)
