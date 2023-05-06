@@ -1,5 +1,5 @@
 # mini-MarioWorld
-A CG Discipline's project. Coded in Python with OpenCV and Numpy
+A CG Discipline's project. Coded in Python with OpenCV and Numpy.
 
 ### Dependencies
 - Python >= 3.11
@@ -14,7 +14,7 @@ The follow command must be executed on the project's root directory.
 2. Now, with [pip](https://pypi.org/project/pip/) package manager, run the follow command to install the dependencies:
     > pip install -r _requirements.txt_
 ### Test
-Execute the <span>animation.py</span> file with the command:
+Execute the <span>animation.py</span> file with follow the command:
 >python _<span>animation.py</span>_
 > 
 **Note:** Press the `Esc` key to end.
