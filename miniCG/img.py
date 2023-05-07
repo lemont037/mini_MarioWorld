@@ -10,10 +10,10 @@ def set_pixel(img, x, y, intst):
     if y < 0:
         y = 0
     
-    if x > img.shape[1]:
-        x = img.shape[1]
-    if y > img.shape[0]:
-        y = img.shape[0]
+    if x > img.shape[1]-1:
+        x = img.shape[1]-1
+    if y > img.shape[0]-1:
+        y = img.shape[0]-1
 
     img[y,x] = intst
 
@@ -152,8 +152,8 @@ def strt_line_ddaaa(buf, xi, yi, xf, yf, intst):
 def scan_line(buf, pol, tex):
     img = buf
 
-    y_min = np.uint8(np.min(pol[:, 1]))
-    y_max = np.uint8(np.max(pol[:, 1]))
+    y_min = round(np.min(pol[:, 1]))
+    y_max = round(np.max(pol[:, 1]))
 
     for y in range(y_min, y_max):
         i = np.array([], np.float32)
@@ -183,7 +183,6 @@ def scan_line(buf, pol, tex):
 
             x1 = p1[0]
             x2 = p2[0]
-            
 
             if (x2 < x1):
                 p1, p2 = p2, p1

@@ -31,17 +31,17 @@ m_t = transform.translation(m_t, -200, -200)
 m_t = transform.rotation(m_t, 2)
 m_t = transform.translation(m_t, 200, 200)
 
+# Animation loop
 # Press Esc to end animation
-while(True):
+k = None
+while(k != 27):
     # Create clean image
     m = img.create(w, h)
     # Do Scanline
     m = img.scan_line(m, p, tex)
     # Show image generated
     cv2.imshow("Test", m)
-    # If press Esc, end animation
+    # Wait 10 milsecs or capture key pressed
     k = cv2.waitKey(10)
-    if (k == 27):
-        break
     # Apply transformation: Rotation
     p = transform.apply(p, m_t)
