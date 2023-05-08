@@ -1,5 +1,7 @@
+import sys
 import cv2
 import numpy as np
+sys.path.append('..')
 from miniCG import img, poly, transform, window
 
 # Image shape
@@ -10,7 +12,7 @@ w = 200
 j = np.array([-1, -1, 2, 1], np.float32)
 
 # Load texture
-tex = cv2.imread("assets/cat.jpg")
+tex = cv2.imread("../assets/cat.jpg")
 tex = cv2.cvtColor(tex, cv2.COLOR_RGB2GRAY)
 
 # Create Polygon 01

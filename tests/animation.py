@@ -1,4 +1,6 @@
+import sys
 import cv2
+sys.path.append('..')
 from miniCG import img, poly, transform
 
 # Image's shape
@@ -11,7 +13,7 @@ w = 400
 #m = img.strt_line_dda(m, 250, 250, 450, 450, 150)
 
 # Load texture
-tex = cv2.imread("assets/cat.jpg")
+tex = cv2.imread("../assets/cat.jpg")
 tex = cv2.cvtColor(tex, cv2.COLOR_RGB2GRAY)
 
 # Create polygon
