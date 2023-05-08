@@ -14,7 +14,11 @@ The follow commands must be executed on the project's root directory.
 2. Now, with [pip](https://pypi.org/project/pip/) package manager, execute to install the dependencies:
     > pip install -r _requirements.txt_
 ### Tests
-Execute the <span>animation.py</span> file with follow the command:
+Execute the animations algorithms on `tests/` directory with follow the commands:
 >python _<span>animation.py</span>_
-> 
+
+>python _<span>animation_with_window.py</span>_
+
+>python _<span>animation_with_multi_window.py</span>_
+
 **Note:** Press the `Esc` key to end.
