@@ -1,3 +1,4 @@
+import math
 from miniCG import poly
 import numpy as np
 
@@ -14,8 +15,10 @@ def set_pixel(img, x, y, intst):
         x = img.shape[1]-1
     if y > img.shape[0]-1:
         y = img.shape[0]-1
+    
+    x, y = int(round(x)), int(round(y))
 
-    img[y,x] = intst
+    img[y, x] = intst
 
     return img
 
@@ -119,11 +122,39 @@ def bresenham(buf, xi, yi, xf, yf, intst):
     
     return img
 
-def strt_line_ddaaa(buf, xi, yi, xf, yf, intst):
+def bresenham_circle(buf, xi, yi, xf, yf, intst):
     img = buf
+    r = math.sqrt(math.pow((xf-xi), 2)-math.pow((yf-yi), 2))
+    c = 2*math.pi*r
 
     dx = xf-xi
     dy = yf-yi
+
+    dx2 = 2*dx
+    dy2 = 2*dy
+
+    p = math.sqrt(math.pow(r, 2)-math.pow(x, 2))
+    x = 0
+    y = round(r)
+
+    for i in range(0, abs(c/8)):
+        img = set_pixel(img, x, y, intst)
+
+        x = x+1
+        if (p >= 0):
+            y += 1
+
+            p = p-math.sqrt(math.pow(r, 2)-math.pow(x, 2))
+        else:
+            p += dy2
+    
+    return img
+
+def strt_line_ddaaa(buf, xi, yi, xf, yf, intst):
+    img = buf
+
+    dx = round(xf-xi)
+    dy = round(yf-yi)
 
     steps = abs(dx)
     if (abs(dy) > abs(dx)):
@@ -177,7 +208,7 @@ def scan_line(buf, pol, tex):
         if (p_int[0] >= 0):
             i = np.array(i.tolist() + [p_int], np.float32)
 
-        for pi in range(0, i.shape[0], 2):
+        for pi in range(0, i.shape[0]-1, 2):
             p1 = i[pi, :]
             p2 = i[pi+1, :]
 

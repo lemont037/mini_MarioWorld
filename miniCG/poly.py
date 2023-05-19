@@ -1,3 +1,4 @@
+from miniCG import img
 import numpy as np
 
 def create():
@@ -34,3 +35,13 @@ def intersec(scan, seg):
     
     # No intersection
     return np.array([-1, 0, 0, 0], np.float32)
+
+def draw(buf, pol, intst):
+    m = buf
+
+    for i in range(0, pol.shape[0]-1):
+        m = img.strt_line_ddaaa(m, pol[i, 0], pol[i, 1], pol[i+1, 0], pol[i+1, 1], intst)
+
+    m = img.strt_line_ddaaa(m, pol[-1, 0], pol[-1, 1], pol[0, 0], pol[0, 1], intst)
+    
+    return m 
