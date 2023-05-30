@@ -14,14 +14,17 @@ w = 400
 
 # Create polygon
 p = poly.create()
-p = poly.insert_dot(p, [160, 160, [255, 0, 0]])
-p = poly.insert_dot(p, [240, 160, [0, 255, 0]])
-p = poly.insert_dot(p, [240, 240, [0, 0, 255]])
-p = poly.insert_dot(p, [160, 240, [0, 0, 0]])
+p = poly.insert_dot(p, [160, 160, 0, 0])
+p = poly.insert_dot(p, [240, 160, 0, 1])
+p = poly.insert_dot(p, [240, 240, 1, 1])
+p = poly.insert_dot(p, [160, 240, 1, 0])
 
 # m = img.scan_line(m, p, tex)
 # cv2.imshow("Test", m)
 # cv2.waitKey(0)
+
+# Load texture
+tex = cv2.imread("../assets/cat.jpg")
 
 # Create transformation matrix: Rotation
 m_t = transform.create()
@@ -36,7 +39,7 @@ while(k != 27):
     # Create clean image
     m = img.create_rgb(w, h)
     # Do Scanline
-    m = img.scan_line_rgb(m, p)
+    m = img.scan_line(m, p, tex)
     # Draw outlines
     #m = poly.draw_rgb(m, p)
     # Show image generated

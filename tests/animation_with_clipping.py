@@ -56,10 +56,8 @@ while(k != 27):
     m = img.scan_line(m, pv, tex)
     # Map Poly 02 to Viewport 01
     pv = window.map_multi(p2, j1, v1)
-    print(pv)
     # Clipping Poly 02
     pv = clipping.apply(v1, pv)
-    print(pv)
     # Do Scanline
     m = img.scan_line(m, pv, tex)
     # Map Poly 01 to Viewport 02

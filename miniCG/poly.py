@@ -3,10 +3,10 @@ from miniCG import img
 import numpy as np
 
 def create():
-    return np.array([], np.float32)
+    return np.array([], dtype=object)
 
 def insert_dot(pol, dot):
-    return np.array(pol.tolist() + [dot], np.float32)
+    return np.array(pol.tolist() + [dot], dtype=object)
 
 def intersec(scan, seg):
     pi = seg[0]
@@ -38,7 +38,7 @@ def intersec(scan, seg):
             #print(t*(pf[0]-pi[0]))
             intst = color_intersec(pi, pf, t*(pf[1]-pi[1]), 0)
 
-            return np.array([x, y, intst], np.float32)
+            return np.array([x, y, intst], dtype=object)
     
     # No intersection
     return np.array([-1, 0, 0, 0], np.float32)
@@ -64,9 +64,31 @@ def draw_rgb(buf, pol):
     return m
 
 def color_intersec(p1, p2, t, t_min):
-    color_range = abs(p2[2] - p1[2])
-    color_min = np.min([p1[2], p2[2]])
-    dots_range = math.sqrt(math.pow(p2[0]-p1[0], 2) + math.pow(p2[1]-p1[1], 2))
-    
-    intst = (((t - t_min) * color_range) / dots_range) + color_min
-    return intst
+    if (np.isscalar(p1[2]) and np.isscalar(p2[2])):
+        if (p2[2] > p1[2]):
+            color_range = abs(p2[2] - p1[2])
+        else:
+            color_range = abs(p1[2] - p2[2])
+
+        color_min = np.min([p1[2], p2[2]])
+        dots_range = math.sqrt(math.pow(p2[0]-p1[0], 2) + math.pow(p2[1]-p1[1], 2))
+        
+        intst = (((t - t_min) * color_range) / dots_range) + color_min
+        
+        return intst
+    else:
+        p1_b = [p1[0], p1[1], p1[2][0]]
+        p1_g = [p1[0], p1[1], p1[2][1]]
+        p1_r = [p1[0], p1[1], p1[2][2]]
+
+        p2_b = [p2[0], p2[1], p2[2][0]]
+        p2_g = [p2[0], p2[1], p2[2][1]]
+        p2_r = [p2[0], p2[1], p2[2][2]]
+
+        b = color_intersec(p1_b, p2_b, t, t_min)
+        g = color_intersec(p1_g, p2_g, t, t_min)
+        r = color_intersec(p1_r, p2_r, t, t_min)
+        
+        intst = np.array([b, g, r], np.uint8)
+
+        return intst

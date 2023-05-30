@@ -5,6 +5,9 @@ import numpy as np
 def create(w, h):
     return np.zeros((h, w), np.uint8)
 
+def create_rgb(w, h):
+    return np.zeros((h, w, 3), np.uint8)
+
 def set_pixel(img, x, y, intst):
     if x < 0:
         x = 0
@@ -183,8 +186,8 @@ def strt_line_ddaaa(buf, xi, yi, xf, yf, intst):
 def strt_line_ddaaa_rgb(buf, xi, yi, xf, yf, intst_i, intst_f):    
     img = buf
 
-    p1 = np.array([xi, yi, intst_i], np.float32)
-    p2 = np.array([xf, yf, intst_f], np.float32)
+    p1 = np.array([xi, yi, intst_i], dtype=object)
+    p2 = np.array([xf, yf, intst_f], dtype=object)
 
     color_range = abs(intst_i - intst_f)
     color_min = np.min([intst_i, intst_f])
@@ -235,7 +238,7 @@ def scan_line(buf, pol, tex):
             p_int = poly.intersec(y, [pi, pf])
 
             if (p_int[0] >= 0):
-                i = np.array(i.tolist() + [p_int], np.float32)
+                i = np.array(i.tolist() + [p_int], dtype=object)
 
             pi = pf
 
@@ -244,7 +247,7 @@ def scan_line(buf, pol, tex):
         p_int = poly.intersec(y, [pi, pf])
 
         if (p_int[0] >= 0):
-            i = np.array(i.tolist() + [p_int], np.float32)
+            i = np.array(i.tolist() + [p_int], dtype=object)
 
         for pi in range(0, i.shape[0]-1, 2):
             p1 = i[pi, :]
@@ -282,13 +285,10 @@ def scan_line_rgb(buf, pol):
         for p in range(1, pol.shape[0]):
             pf = pol[p, :]
 
-            color_range = pi[2] - pf[2]
-            color_min = np.min([pi[2], pf[2]])
-
             p_int = poly.intersec(y, [pi, pf])
             
             if (p_int[0] >= 0):
-                i = np.array(i.tolist() + [p_int], np.float32)
+                i = np.array(i.tolist() + [p_int], dtype=object)
 
             pi = pf
 
@@ -296,7 +296,7 @@ def scan_line_rgb(buf, pol):
         p_int = poly.intersec(y, [pi, pf])
 
         if (p_int[0] >= 0):
-            i = np.array(i.tolist() + [p_int], np.float32)
+            i = np.array(i.tolist() + [p_int], dtype=object)
 
         for pi in range(0, i.shape[0]-1, 2):
             p1 = i[pi, :]
@@ -312,7 +312,8 @@ def scan_line_rgb(buf, pol):
             x_p2 = abs(int(p2[0]))
             for xk in range(x_p1, x_p2):
                 intst = poly.color_intersec(p1, p2, xk, x_p1)
-
+                
+                #intst = (intst[0], intst[1], intst[2])
                 img = set_pixel(img, xk, y, intst)
 
     return img
