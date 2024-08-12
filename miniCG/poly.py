@@ -92,3 +92,83 @@ def color_intersec(p1, p2, t, t_min):
         intst = np.array([b, g, r], np.uint8)
 
         return intst
+    
+def draw_circulo(center_x, center_y, radius):
+    x = 0
+    y = radius
+    p = 1 - radius
+
+    points = set()
+
+    while x <= y:
+        points.add((x + center_x, y + center_y))
+        points.add((-x + center_x, y + center_y))
+        points.add((x + center_x, -y + center_y))
+        points.add((-x + center_x, -y + center_y))
+        points.add((y + center_x, x + center_y))
+        points.add((-y + center_x, x + center_y))
+        points.add((y + center_x, -x + center_y))
+        points.add((-y + center_x, -x + center_y))
+
+        if p < 0:
+            p += 2 * x + 3
+        else:
+            p += 2 * (x - y) + 5
+            y -= 1
+
+        x += 1
+
+    return np.array(list(points), np.float32)
+
+def set_circulo(m, p_sol, r, g, b):
+    for point in p_sol:
+        m = img.set_pixel(m, point[1], point[0], (r, g, b))
+    return m
+
+def draw_elipse(center_x, center_y, radius_x, radius_y):
+    points = set()
+
+    x = 0
+    y = radius_y
+
+    a_sqr = radius_x * radius_x
+    b_sqr = radius_y * radius_y
+
+    p = b_sqr - a_sqr * radius_y + 0.25 * a_sqr
+
+    while b_sqr * x <= a_sqr * y:
+        points.add((x + center_x, y + center_y))
+        points.add((-x + center_x, y + center_y))
+        points.add((x + center_x, -y + center_y))
+        points.add((-x + center_x, -y + center_y))
+
+        if p < 0:
+            p += b_sqr * (2 * x + 3)
+        else:
+            p += b_sqr * (2 * x + 3) + a_sqr * (2 - 2 * y)
+            y -= 1
+
+        x += 1
+
+    p = b_sqr * (x + 0.5) * (x + 0.5) + a_sqr * (y - 1) * (y - 1) - a_sqr * b_sqr
+
+    while y >= 0:
+        points.add((x + center_x, y + center_y))
+        points.add((-x + center_x, y + center_y))
+        points.add((x + center_x, -y + center_y))
+        points.add((-x + center_x, -y + center_y))
+
+        if p > 0:
+            p += a_sqr * (3 - 2 * y)
+        else:
+            p += b_sqr * (2 * x + 2) + a_sqr * (3 - 2 * y)
+            x += 1
+
+        y -= 1
+
+    return np.array(list(points), np.float32)
+
+def set_elipse(m, p_elipse, r, g, b):
+    for point in p_elipse:
+        m = img.set_pixel(m, point[1], point[0], (r, g, b))
+    return m
