@@ -43,8 +43,6 @@ def framing(edges, p1, p2):
     p_l = np.copy(p1)
     p_r = np.copy(p2)
 
-    #print(f"p_l: {p_l} | p_r: {p_r}")
-
     left_ed = edges[0]
     bottom_ed = edges[1]
     right_ed = edges[2]
@@ -57,18 +55,13 @@ def framing(edges, p1, p2):
 
     # Left Edge Test - Through
     if (p_l[0] < left_ed and p_r[0] >= left_ed):
-        #print(f"Intersec left_ed: {left_ed}")
         p_l = intersec(axis_x=left_ed, seg=[p_l, p_r])
-        #print(f"p_l: {p_l}")
         p = np.array(p.tolist() + [p_l], np.float32)
         p = np.array(p.tolist() + [p_r], np.float32)
-        #print(f"p: {p}")
     # Left Edge Test - Inside
     elif (p_l[0] >= left_ed and p_r[0] >= left_ed):
-        #print(f"Inside left_ed: {left_ed}")
         p = np.array(p.tolist() + [p_l], np.float32)
         p = np.array(p.tolist() + [p_r], np.float32)
-        #print(f"p: {p}")
 
     # If complete horizontaly left outside, return
     if (len(p) == 0):
@@ -76,14 +69,10 @@ def framing(edges, p1, p2):
     
     # Right Edge Test - Through
     if (p_l[0] <= right_ed and p_r[0] > right_ed):
-        #print(f"Intersec right_ed: {right_ed}")
         p_r = intersec(axis_x=right_ed, seg=[p_l, p_r])
-        #print(f"p_r: {p_r}")
         p[1] = p_r
-        #print(f"p: {p}")
     # Right Edge Test - Outside
     elif (p_l[0] > right_ed and p_r[0] > right_ed):
-        #print(f"Outside right_ed: {right_ed}")
         p = np.delete(p, (0,1), axis=0)
         # Complete horizontaly right outside, return
         return p
@@ -98,14 +87,11 @@ def framing(edges, p1, p2):
 
     # Top Edge Test - Through
     if (p_l[1] <= top_ed and p_r[1] > top_ed):
-        #print(f"Intersec top_ed: {top_ed}")
         p_r = intersec(axis_y=top_ed, seg=[p_l, p_r])
-        #print(f"p_r: {p_r}")
         p[1] = p_r
         #print(f"p: {p}")
     # Top Edge Test - Outside
     elif(p_l[1] > top_ed and p_r[1] > top_ed):
-        #print("Outside top_ed")
         p = np.delete(p, (0,1), axis=0)
         # Complete horizontaly right outside, return
         return p
@@ -118,7 +104,6 @@ def framing(edges, p1, p2):
         p[0] = p_l
     # Bottom Edge Test - Outside
     elif(p_l[1] < bottom_ed and p_r[1] < bottom_ed):
-        #print("Outside bottom_ed")
         p = np.delete(p, (0,1), axis=0)
         # Complete horizontaly right outside, return
         return p
@@ -137,12 +122,15 @@ def apply(v, pol):
         for dot in framing(v, pol[i], pol[i+1]):
             p = poly.insert_dot(p, dot)
     
-
-    seg = framing(v, pol[-1], pol[0])
-    if (seg.shape[0] == 2):
-        p[-1] = seg[0]
-        p[0] = seg[1]
-    else:
-        np.delete(p, (0,-1), axis=0)
     
+    if (p.shape[0] != 0 and p.shape[1] != 0):
+        p = np.delete(p, -1, 0)
+    
+    for dot in framing(v, pol[3], pol[2]):
+        p = poly.insert_dot(p, dot)
+
+    if (p.shape[0] != 0 and p.shape[1] != 0):
+        p = np.delete(p, -1, 0)
+        p = poly.insert_dot(p, p[0])
+   
     return p

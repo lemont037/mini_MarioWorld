@@ -1,6 +1,7 @@
 import math
 from miniCG import poly
 import numpy as np
+import queue
 
 def create(w, h):
     return np.zeros((h, w), np.uint8)
@@ -189,9 +190,6 @@ def strt_line_ddaaa_rgb(buf, xi, yi, xf, yf, intst_i, intst_f):
     p1 = np.array([xi, yi, intst_i], dtype=object)
     p2 = np.array([xf, yf, intst_f], dtype=object)
 
-    color_range = abs(intst_i - intst_f)
-    color_min = np.min([intst_i, intst_f])
-
     dx = round(xf-xi)
     dy = round(yf-yi)
 
@@ -313,7 +311,47 @@ def scan_line_rgb(buf, pol):
             for xk in range(x_p1, x_p2):
                 intst = poly.color_intersec(p1, p2, xk, x_p1)
                 
-                #intst = (intst[0], intst[1], intst[2])
                 img = set_pixel(img, xk, y, intst)
+
+    return img
+
+def flood_fill_valided(img, row, column, visited, target_color, new_color):
+    if row < 0 or row >= img.shape[0]:
+        return False
+    elif column < 0 or column >= img.shape[1]:
+        return False
+    elif np.all(img[row, column] == new_color):
+        return False
+    elif np.all(img[row, column] != target_color) or visited[row, column]:
+        return False
+    
+    return True
+
+def flood_fill(img, row, column, new_color):
+
+    delta_x = [1, -1, 0, 0]
+    delta_y = [0, 0, 1, -1]
+
+    target_color = img[row, column]
+
+    visited = np.full((img.shape[0], img.shape[1]), False) 
+
+    queue_pos = queue.Queue()
+    queue_pos.put((row, column))
+
+    visited[row][column] = True
+
+    while not queue_pos.empty():
+        current = queue_pos.get()
+
+        img[current[0], current[1]] = new_color
+
+        for i in range(0, 4):
+            next_row = current[0] + delta_x[i]
+            next_column = current[1] + delta_y[i]
+
+            if flood_fill_valided(img, next_row, next_column, visited, target_color, new_color):
+                visited[next_row][next_column] = True
+                queue_pos.put((next_row, next_column))
 
     return img

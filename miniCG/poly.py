@@ -34,8 +34,6 @@ def intersec(scan, seg):
             ty = pi[3] + t*(pf[3]-pi[3])
             return np.array([x, y, tx, ty], np.float32)
         else:
-            #print(f"t: {t}\npi[0]: {pi[1]}\n pf[0]: {pf[1]}\n----------")
-            #print(t*(pf[0]-pi[0]))
             intst = color_intersec(pi, pf, t*(pf[1]-pi[1]), 0)
 
             return np.array([x, y, intst], dtype=object)

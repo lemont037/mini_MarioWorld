@@ -116,7 +116,10 @@ while(k != 27):
 
     # Adiciona as elipses à imagem animada
     m = poly.set_elipse(m, ellipse1_points, 0, 255, 0)  
-    m = poly.set_elipse(m, ellipse2_points, 255, 0, 255)   
+    m = poly.set_elipse(m, ellipse2_points, 255, 0, 255)
+
+    # Flood Feel
+    m =  img.flood_fill(m, 171, 222, [0, 255, 0])
 
     # Show image generated
     cv2.imshow("mini-Mario", m)
@@ -143,15 +146,16 @@ while(k != 27):
 
     pv = clipping.apply(j1, mario)
     pv = window.map_multi(pv, j1, v1)
-    if (len(pv) != 0):
+    if (pv.shape[0] != 0 and pv.shape[1] != 0):
         m = img.scan_line(m, pv, tex_mario)
-    
+
     pv = clipping.apply(j2, mario)
     pv = window.map_multi(pv, j2, v2)
-    if (len(pv) != 0):
+    if (pv.shape[0] != 0 and pv.shape[1] != 0):
         m = img.scan_line(m, pv, tex_mario)
     else:
         break
+
     # Show image generated
     cv2.imshow("mini-Mario", m)
     # Apply transformation: Rotation
